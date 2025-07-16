@@ -157,13 +157,21 @@ function hidePasswordError() {
  * 处理密码提交事件（异步）
  */
 async function handlePasswordSubmit() {
+    const usernameInput = document.getElementById('usernameInput');
+    const username = usernameInput ? usernameInput.value.trim() : '';
     const passwordInput = document.getElementById('passwordInput');
     const password = passwordInput ? passwordInput.value.trim() : '';
-    if (await verifyPassword(password)) {
+    let isValid = false;
+    // 校验用户名
+    if (window.__ENV__.USERNAME) {
+        isValid = (username === window.__ENV__.USERNAME) && await verifyPassword(password);
+    } else {
+        // 兼容只校验密码的旧逻辑
+        isValid = await verifyPassword(password);
+    }
+    if (isValid) {
         hidePasswordError();
         hidePasswordModal();
-
-        // 触发密码验证成功事件
         document.dispatchEvent(new CustomEvent('passwordVerified'));
     } else {
         showPasswordError();
