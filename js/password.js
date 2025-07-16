@@ -1,3 +1,6 @@
+// 支持用户名校验
+window.__ENV__ = window.__ENV__ || {};
+// 示例：window.__ENV__.USERNAME = "admin";
 // 密码保护功能
 
 /**
