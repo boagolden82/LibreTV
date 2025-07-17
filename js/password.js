@@ -144,7 +144,7 @@ function showPasswordError() {
 }
 
 /**
- * 隐藏密码错误信息
+ * 隐藏密码错误信息,20250717
  */
 function hidePasswordError() {
     const errorElement = document.getElementById('passwordError');
@@ -153,22 +153,28 @@ function hidePasswordError() {
     }
 }
 
-/**
- * 处理密码提交事件（异步）
- */
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifyUserPassword(username, password) {
+    if (!window.__ENV__?.USERS || !Array.isArray(window.__ENV__.USERS)) return false;
+    const user = window.__ENV__.USERS.find(u => u.username === username);
+    if (!user) return false;
+    const hash = await sha256(password);
+    return hash === user.passwordHash;
+}
+
+// 修改表单提交逻辑,20250717
 async function handlePasswordSubmit() {
     const usernameInput = document.getElementById('usernameInput');
     const username = usernameInput ? usernameInput.value.trim() : '';
     const passwordInput = document.getElementById('passwordInput');
     const password = passwordInput ? passwordInput.value.trim() : '';
-    let isValid = false;
-    // 校验用户名
-    if (window.__ENV__.USERNAME) {
-        isValid = (username === window.__ENV__.USERNAME) && await verifyPassword(password);
-    } else {
-        // 兼容只校验密码的旧逻辑
-        isValid = await verifyPassword(password);
-    }
+    let isValid = await verifyUserPassword(username, password);
+
     if (isValid) {
         hidePasswordError();
         hidePasswordModal();
