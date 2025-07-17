@@ -174,10 +174,15 @@ async function verifyUserPassword(username, password) {
 
 // 修改表单提交逻辑,20250717
 async function handlePasswordSubmit() {
+    alert('用户名和密码开始校验11');
     const usernameInput = document.getElementById('usernameInput');
     const username = usernameInput ? usernameInput.value.trim() : '';
     const passwordInput = document.getElementById('passwordInput');
     const password = passwordInput ? passwordInput.value.trim() : '';
+    alert(usernameInput);
+    alert(username);
+    alert(passwordInput);
+    alert(password);
     let isValid = await verifyUserPassword(username, password);
 
     if (isValid) {
