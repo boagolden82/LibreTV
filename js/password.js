@@ -179,17 +179,17 @@ async function handlePasswordSubmit() {
     const username = usernameInput ? usernameInput.value.trim() : '';
     const passwordInput = document.getElementById('passwordInput');
     const password = passwordInput ? passwordInput.value.trim() : '';
-    alert(usernameInput);
     alert(username);
-    alert(passwordInput);
     alert(password);
     let isValid = await verifyUserPassword(username, password);
-
+    alert('调用完verifyUserPassword');
     if (isValid) {
+        alert('isValid TRUE');
         hidePasswordError();
         hidePasswordModal();
         document.dispatchEvent(new CustomEvent('passwordVerified'));
     } else {
+        alert('isValid F');
         showPasswordError();
         if (passwordInput) {
             passwordInput.value = '';
