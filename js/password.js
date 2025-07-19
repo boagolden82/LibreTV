@@ -160,7 +160,7 @@ async function sha256(message) {
 }
 
 async function verifyUserPassword(username, password) {
-    alert('用户名和密码开始校验');
+    alert('开始调用verifyUserPassword');
     //if (!window.__ENV__?.USERS || !Array.isArray(window.__ENV__.USERS)) return false;
     const user = window.__ENV__.USERS.find(u => u.username === username);
     alert('user');
